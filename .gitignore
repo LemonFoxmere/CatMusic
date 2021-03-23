@@ -1,0 +1,11 @@
+augmentedData/wav/piano
+augmentedData/wav/synthBass1
+augmentedData/wav/violin
+gen_raw_midi/
+augmentedData/midcsv/csv/piano
+augmentedData/midcsv/csv/synthBass1
+augmentedData/midcsv/csv/violin
+augmentedData/midcsv/midi/piano
+augmentedData/midcsv/midi/synthBass1
+augmentedData/midcsv/midi/violin
+

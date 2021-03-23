@@ -1,0 +1,31 @@
+1. sound frequency cannot be determined from 1 sample
+  a. you must have multiple samples put in at once to get a frequency. This means that the data that does into the LSTM cannot have shape (1,), but it must be something like (1,10) so it has some room to work with
+2. the raw audio data must be splitted up into multiple smaller sections to avoid overfitting and long training durations.
+3. the data is limited, so we must augment it by either manipulating its speed, pitch, or amplitudes
+4. amplitudes in the raw audio file does not affect the resulting frequency as much as the resulting output is independent that of the amplitude
+5. there's gonna be alot of bitch works
+6. data processing transcribe to CPP code
+
+TODO:
+1. aquire sample data and see if model works
+2. find out how to write out midi files
+3. find full data sections
+
+PLAN:
+
+
+File type into LSTM:
+Format:
+1| TEMPO={tempo}
+2| TRACK_START
+3| {time_start}.{time_end}.{[freq1, freq2]/silence}
+4| ...
+5| {time_start}.{time_end}.{[freq1, freq2]/silence}
+6| TRACK_END
+
+output encoding: ONE_HOT (128 slots)
+
+Time event calculation:
+Absolute time is based on 1/16th of a MIDI clock. Calculation are as follow:
+1_clock_period = ((tempo/1,000,000)/24)/16
+absolute_time{seconds} = clock_period * clock_repetition
