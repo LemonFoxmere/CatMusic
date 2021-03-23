@@ -25,6 +25,7 @@ for ins in os.listdir(absolute_path):
     file_amt = str(len(os.listdir(ins_path)))
     file_index = 1
     for track in os.listdir(ins_path): # loop thru every track and create augmentations
+        if(track.split('.')[1] != 'wav') continue
         original_track_path = os.path.join(ins_path, track)
         sample_rate_orig, data_orig = wavFile.read(original_track_path) # read in original wav files
         data_orig = data_orig[:,0] # fix meta
