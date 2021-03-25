@@ -25,7 +25,28 @@ Format:
 
 output encoding: ONE_HOT (128 slots)
 
+(C_1)
 Time event calculation:
 Absolute time is based on 1/16th of a MIDI clock. Calculation are as follow:
 1_clock_period = ((tempo/1,000,000)/24)/16
 absolute_time{seconds} = clock_period * clock_repetition
+
+LSTM dev:
+UNIVERSAL time constant: seconds
+ex:
+WAV sample rate = 44.1khz = 0.000022676 s/sample, denoted as T_W
+MIDI sample tempo = 500,000 = 0.00130283 s/sample, denoted as T_M (check C_1 for calculation)
+for every passed in WAV file, a midi note of same time constant (T_W) is produced
+however, when calculating the error between the outputted data and the given data, the timeframe will not match up, as the given output has time constant T_M
+To match up time constant, there are 2 methods:
+1. Create custom error function that force match the time constants
+2. estimate the range of the LSTM output, and averaging them so the outputs time constant can match up, then use mean square error or some deviation errors.
+  a. instead of calculating the average, we can also take the largest value
+
+Pros and Cons (only an estimate):
+1. custom error functions are highly versatile and can be manipulated easily, but can also easily count in outliers as part of the error
+2. Averaging or taking the max will have time offset issues, which can induce unwanted error shifts, and also ignores outliers. But can process faster and let the LSTM focus a bit more on the abstract side of generation.
+
+Check calculation.png for more details
+
+RESEARCH SOURCE CITED:

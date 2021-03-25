@@ -8,5 +8,5 @@ augmentedData/midcsv/csv/violin/*.csv
 augmentedData/midcsv/midi/piano/*.mid
 augmentedData/midcsv/midi/synthBass1/*.mid
 augmentedData/midcsv/midi/violin/*.mid
-LSTMreadyData/input/*.rawIn
-LSTMreadyData/label/*.rawWav
+LSTMreadyData/input/*.rawWav
+LSTMreadyData/output/*.rawOut

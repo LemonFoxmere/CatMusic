@@ -11,9 +11,9 @@ from scipy.io.wavfile import write
 
 split_time = 5 # in seconds
 
-absolute_path = '.'
+absolute_path = '/home/lemonorange/catRemix/LSTMreadyData/'
 # read in rawMid files
-print("[DEBUG] generating raw input data with sample timeframe of " + str(split_time) + " seconds")
+print("[DEBUG] generating raw output data with sample timeframe of " + str(split_time) + " seconds")
 sourceMid_path = os.path.join(absolute_path, '..', 'gen_raw_midi')
 for midFile in tqdm(os.listdir(sourceMid_path)):
     if(midFile.split('.')[1] != 'rawMid'): continue
@@ -30,23 +30,23 @@ for midFile in tqdm(os.listdir(sourceMid_path)):
         end_time = int(line.split(',')[1]) - reps*counterThingIdek
         data = line.split(',')[2]
         if(start_time < reps and end_time > reps):
-            counterThingIdek += 1
             for i in range(start_time, reps+1):
                 file_output_stream += str(i) + ','  + data
-            new_input_name = midFile.split('.')[0] + '_' + str(counterThingIdek) + '.rawIn'
-            fout = open(os.path.join(absolute_path, 'input', new_input_name), 'w')
+            new_output_name = midFile.split('.')[0] + '_' + str(counterThingIdek) + '.rawOut'
+            fout = open(os.path.join(absolute_path, 'output', new_output_name), 'w')
             fout.write(file_output_stream)
             fout.close()
             file_output_stream = str(tempo)+'\n'
             for i in range(0, int(line.split(',')[1])):
                 file_output_stream += str(i) + ','  + data
+            counterThingIdek += 1
         else:
             for i in range(start_time, end_time):
                 file_output_stream += str(i) + ','  + data
 # for midFile in os.listdir(sourceMid_path).remove('readme.txt')[0]
-print("[DEBUG] SUCCESS: raw input generation completed with no errors")
+print("[DEBUG] SUCCESS: raw output generation completed with no errors")
 
-print("[DEBUG] generating raw output data with sample timeframe of " + str(split_time) + " seconds")
+print("[DEBUG] generating raw input data with sample timeframe of " + str(split_time) + " seconds")
 sourceWavPath = os.path.join(absolute_path, '..', 'augmentedData', 'wav')
 instruments = os.listdir(sourceWavPath)
 ins_ID = 0
@@ -73,11 +73,11 @@ for ins in instruments:
             current_data += str(singleChannel[i]) + ' '
             if i == split_frame * (part+1):
                 # interval reached,
-                fout = open(os.path.join(absolute_path, 'label', file.split('.')[0] + '-' + str(ins_ID) + '-' + str(part) + '.rawWav'), 'w') # we can re-assure all sample rate are 44.1khz as they are all synthesized
+                fout = open(os.path.join(absolute_path, 'input', file.split('.')[0] + '-' + str(ins_ID) + '-' + str(part) + '.rawWav'), 'w') # we can re-assure all sample rate are 44.1khz as they are all synthesized
                 fout.write(current_data)
                 current_data = str(singleChannel[i]) + ' '
                 part += 1
     print("[DEBUG] All files within the \"" + ins + "\" is finished\n\n")
     ins_ID += 1
-print("[DEBUG] SUCCESS: raw output generation completed with no errors")
+print("[DEBUG] SUCCESS: raw input generation completed with no errors")
 print("[DEBUG] Program is now finished, and will now automatically shutoff. Goodbye.")
