@@ -7,11 +7,10 @@ from numpy.fft import fft, ifft
 # %matplotlib inline
 
 # file path may differ
-Fs, data = wavFile.read('testAudio.wav')
+Fs, data = wavFile.read('/home/lemonorange/catRemix/testAudio.wav')
 data = data[:,0]
 
 print("sampling Frequency is", Fs)
-
 downScale = []
 sample = []
 repetition = 5 #the amount of downScale

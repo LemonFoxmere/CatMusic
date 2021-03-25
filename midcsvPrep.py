@@ -67,6 +67,7 @@ for fin in ALL_FILES:
     fout = open(output_file_name, 'w')
     fout.write(str(tempo)+'\n')
     fout.write(output)
+    fout.write("eof")
     fout.close()
     fin.seek(0) # reset pointer for next iteration
 end_time = systemClock.time()

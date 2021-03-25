@@ -18,9 +18,9 @@ File type into LSTM:
 Format:
 1| TEMPO={tempo}
 2| TRACK_START
-3| {time_start}.{time_end}.{[freq1, freq2]/silence}
+3| {time_start}.{time_end}.{[freq1, freq2]/{0}}
 4| ...
-5| {time_start}.{time_end}.{[freq1, freq2]/silence}
+5| {time_start}.{time_end}.{[freq1, freq2]/{0}}
 6| TRACK_END
 
 output encoding: ONE_HOT (128 slots)
