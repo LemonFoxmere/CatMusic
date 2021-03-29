@@ -49,4 +49,24 @@ Pros and Cons (only an estimate):
 
 Check calculation.png for more details
 
-RESEARCH SOURCE CITED:
+Loss graph format:
+Train binary_crossentropy
+Train mean_squared_error
+Val binary_crossentropy
+Val mean_squared_error
+
+Optimal network structure and training parameters as of now:
+1.
+Sequential
+  |_ Model structure:
+  |   |_ LSTM(128, batch_input_shape=((None, 1, compression_size)), activation='relu', return_sequences=True)
+  |   |_ Dense(128, activation='tanh')
+  |   |_ Using CuDNN?
+  |   |   |_ No
+  |   |_ Avg training cycle time: 10s
+  |
+  |_ Opt = Adam(lr=1e-2, decay=1e-5)
+  |   |_ Loss = mean_squared_error
+  |
+  |_ Lowest loss: 0.02
+  |_ RESULT: Overfitted horribly
