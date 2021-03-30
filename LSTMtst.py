@@ -1,3 +1,4 @@
+import os
 import tensorflow as tf
 import keras
 import numpy as np
@@ -23,8 +24,20 @@ xx = x[300:600]
 f_x = tf.reshape(bruhx,(300,1,784))
 more_x = tf.reshape(xx,(300,1,784))
 
-a = [[0.,0.,0.,0.,0.,0.,1.,0.],[0.,0.,0.,0.,0.,0.,1.,0.],[0.,0.,0.,0.,0.,0.,1.,0.]]
-b = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]
+new_cost_function = lambda inp, oup : tf.math.multiply(tf.math.multiply(tf.losses.binary_crossentropy(a, b), np.e), tf.keras.losses.categorical_crossentropy(a, b))
+
+a = [0.,1.,0.,0.,0.,0.,1.,0.]
+# b = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]
+# b = [1.,1.,1.,1.,1.,1.,1.,1.]
+# b = [0.5,1.,0.5,0.5,0.5,0.5,1.,0.5]
+# b = [0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001]
+# b = [0.01,1.,0.001,0.01,0.01,0.001,1.,0.01]
+b = [0.,1.,0.,0.,0.,0.,1.,0.]
+
+tf.nn.softmax_cross_entropy_with_logits(labels=a, logits=b).numpy()
+tf.losses.binary_crossentropy(a, b).numpy()
+tf.keras.losses.categorical_crossentropy(a, b).numpy()
+new_cost_function(a, b).numpy()
 
 def getCustomLoss(train_in, gen_in):
     match = 0
@@ -32,8 +45,6 @@ def getCustomLoss(train_in, gen_in):
     min_thre = 0.3
     max_thre = 0.9
 
-
-tf.losses.binary_crossentropy(a, b).numpy()
 np.average(tf.losses.mean_squared_error(a, b).numpy())
 
 f_x.shape

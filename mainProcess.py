@@ -20,7 +20,7 @@ from datetime import datetime
 t_g = np.float64(1/44100) # gen_out time constant per sample, this needs to be as precise as possible
 t_t = np.float64(((500000/1000000)/24)/16) # train_out time constant per sample, this needs to be as precise as possible
 period_constant = np.float64(t_t/t_g) # this needs to be as precise as possible
-compression_size = 2
+compression_size = 50
 
 # METHOD DEFINITIONS
 def match_gen_output_shape(gen_out, train_out):
@@ -68,8 +68,8 @@ model = make_model()
 model.compile(metrics=['accuracy'])
 opt = Adam(lr=1e-3, decay=1e-3)
 
-def get_bin_loss(orig_data, gen_pred):
-    return tf.losses.binary_crossentropy(orig_data, gen_pred)
+def get_cse_loss(orig_data, gen_pred):
+    return tf.nn.softmax_cross_entropy_with_logits(orig_data, gen_pred)
 
 def get_mse_loss(orig_data, gen_pred):
     return tf.losses.mean_squared_error(orig_data, gen_pred)
@@ -96,9 +96,9 @@ def train_step(orig_in, orig_out, val_in, val_out, epochs):
             # gen_val_out = np.reshape(gen_val_out, [-1])
 
             print("[DEBUG] Calculating loss...")
-            train_bin_loss = get_bin_loss(gen_out, orig_out)
+            train_bin_loss = get_cse_loss(gen_out, orig_out)
             train_mse_loss = get_mse_loss(orig_out, gen_out)
-            val_bin_loss = get_bin_loss(val_out, gen_val_out)
+            val_bin_loss = get_cse_loss(val_out, gen_val_out)
             val_mse_loss = get_mse_loss(val_out, gen_val_out)
 
             loss_over_time.append(train_bin_loss)
@@ -132,8 +132,8 @@ input_path = os.path.join(absolute_path, 'LSTMreadyData', 'input')
 # read in all datasets
 save_time = 1
 start_time = systemClock.time()
-input_length = len(os.listdir(input_path)[:500])
-for input_file_name in tqdm(os.listdir(input_path)[:500]):
+input_length = len(os.listdir(input_path)[:50])
+for input_file_name in tqdm(os.listdir(input_path)[:50]):
     if(input_file_name.split('.')[1] == 'txt'): continue # ignore all txt files
     if(lost_data > 50): print("[WARNING] Over 50 datasets have been lost or corrupted. Are you sure this is normal?")
     input_file_path = os.path.join(input_path, input_file_name)
@@ -188,7 +188,7 @@ for input_file_name in tqdm(os.listdir(input_path)[:500]):
     lap_time = systemClock.time()
     print('[DEBUG] Program has been running non-stop for ' + str(int(lap_time - start_time)/60) + ' minutes now. You should probably go to sleep.')
 
-    if(processed_data >= 25*save_time):
+    if(processed_data >= 10*save_time):
         save_name = datetime.now().strftime("%Y-%m-%d-%H-%M-%S.%f") + '_net_atempt.h5'
         # save current archetechture as h5 in the appointed directory
         model.save(os.path.join(save_path, save_name))
