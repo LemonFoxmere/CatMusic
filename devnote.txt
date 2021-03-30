@@ -83,3 +83,6 @@ This function attempts to scale down the CATCSE values as the deviation gets sma
 
 Journal end
 I am fucking tired
+
+Source Notes (Paper)
+[Adding here]
