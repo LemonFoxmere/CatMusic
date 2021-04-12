@@ -1,18 +1,15 @@
 1. sound frequency cannot be determined from 1 sample
   a. you must have multiple samples put in at once to get a frequency. This means that the data that does into the LSTM cannot have shape (1,), but it must be something like (1,10) so it has some room to work with
+  b. currently set at 1/8 duration of a quarter note for theoretical maximum yield.
 2. the raw audio data must be splitted up into multiple smaller sections to avoid overfitting and long training durations.
 3. the data is limited, so we must augment it by either manipulating its speed, pitch, or amplitudes
 4. amplitudes in the raw audio file does not affect the resulting frequency as much as the resulting output is independent that of the amplitude
 5. there's gonna be alot of bitch works
 6. data processing transcribe to CPP code
 
-TODO:
-1. aquire sample data and see if model works
-2. find out how to write out midi files
-3. find full data sections
-
-PLAN:
-
+TODO: trim all data to 88 notes insetad of 128
+experiment using BLSTM
+Normalize input
 
 File type into LSTM:
 Format:
@@ -47,6 +44,9 @@ Pros and Cons (only an estimate):
 1. custom error functions are highly versatile and can be manipulated easily, but can also easily count in outliers as part of the error
 2. Averaging or taking the max will have time offset issues, which can induce unwanted error shifts, and also ignores outliers. But can process faster and let the LSTM focus a bit more on the abstract side of generation.
 
+wavFile naming convention:
+songID_precussionId(if none, does not display) - instrumentID - partID
+
 Check calculation.png for more details
 
 Loss graph format:
@@ -71,6 +71,26 @@ Sequential
   |_ Lowest loss: 0.02
   |_ RESULT: Overfitted horribly
 
+2.
+Sequential
+  |_ Model structure:
+  |   |_ LSTM(128, batch_input_shape=((None, 1, compression_size)), activation='relu', return_sequences=True)
+  |   |_ BatchNormalization()
+  |   |_ Dense(128, activation='relu')
+  |   |_ Dense(256, activation='relu')
+  |   |_ Dense(200, activation='relu')
+  |   |_ Dense(160, activation='relu')
+  |   |_ Dense(128, activation='sigmoid')
+  |   |_ Using CuDNN?
+  |   |   |_ No
+  |   |_ Avg training cycle time: 7s
+  |
+  |_ Opt = Adam(lr=1e-2, decay=1e-5)
+  |   |_ Loss = custom BINCE and categorical_crossentropy loss
+  |
+  |_ Lowest loss: 18.3
+  |_ RESULT: Extremely close to original data, but stuck at one output.
+
 Research Journal 3-29:
 Experiments are done on the effectiveness of loss functions on large onehot-encoded datasets
 On average, the binary_crossentropy loss function performed poorly on most occasions, but can be used as an accurate representation of the deviation of the output to the ground truth. The softmax_cross_entropy_with_logits, as well as categorical_crossentropy performed similarly, with the categorical_crossentropy having a noticable 50% decrease in loss in smaller output to ground truth deviations. A new loss function was then created in the attempt to combine the benefits of both loss functions. The new function is depicted as follow:
@@ -81,5 +101,9 @@ Optimal scaler has not been tested yet, although optimal scaler seems to be clos
 
 This function attempts to scale down the CATCSE values as the deviation gets smaller, which in a way, the BINCSE is controlling the overall loss at smaller deviations. However, at larger deviations, under normal circumstances, BINCE approaches close to 0.6-0.7. And after the application of the constant scaler, acts as a new scaler vector of 1.2-1.4 for the CATCSE loss, which can more accuratly represent the overall deviation fron the ground truth.
 
-Journal end
-I am fucking tired
+Research Journal 4-10:
+Stacked LSTM models are created to improve efficiency, and a basic sense of rhythm and composition is detected. The suspecting failure point is the poor matching algorithm chosen for the generated output set and ground truth data set. The custom loss is abandoned for its inefficiency in classifying larger sequential multi-label datasets, and instead binary_crossentropy is used. Softmax as the output activation is also abandoned in replace of sigmoid, which is not based on a probabilistic model, thus being more efficient in multi-label classification.
+
+TANH as the activation is currently considered, but not yet implemented, as the large scale deviation is suspected to cause underfitting and instability within the model.
+
+For generation matching algorithm issues check "genShapeMatch.kra".
