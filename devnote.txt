@@ -101,9 +101,17 @@ Optimal scaler has not been tested yet, although optimal scaler seems to be clos
 
 This function attempts to scale down the CATCSE values as the deviation gets smaller, which in a way, the BINCSE is controlling the overall loss at smaller deviations. However, at larger deviations, under normal circumstances, BINCE approaches close to 0.6-0.7. And after the application of the constant scaler, acts as a new scaler vector of 1.2-1.4 for the CATCSE loss, which can more accuratly represent the overall deviation fron the ground truth.
 
+<<<<<<< HEAD
 Research Journal 4-10:
 Stacked LSTM models are created to improve efficiency, and a basic sense of rhythm and composition is detected. The suspecting failure point is the poor matching algorithm chosen for the generated output set and ground truth data set. The custom loss is abandoned for its inefficiency in classifying larger sequential multi-label datasets, and instead binary_crossentropy is used. Softmax as the output activation is also abandoned in replace of sigmoid, which is not based on a probabilistic model, thus being more efficient in multi-label classification.
 
 TANH as the activation is currently considered, but not yet implemented, as the large scale deviation is suspected to cause underfitting and instability within the model.
 
 For generation matching algorithm issues check "genShapeMatch.kra".
+=======
+Journal end
+I am fucking tired
+
+Source Notes (Paper)
+[Adding here]
+>>>>>>> ab452803fa99a2a201537cf737f12bd3adafd37a

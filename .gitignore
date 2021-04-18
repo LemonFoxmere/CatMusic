@@ -10,3 +10,4 @@ augmentedData/midcsv/midi/synthBass1/*.mid
 augmentedData/midcsv/midi/violin/*.mid
 LSTMreadyData/input/*.rawWav
 LSTMreadyData/output/*.rawOut
+LSTMmodels/*

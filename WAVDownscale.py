@@ -7,8 +7,10 @@ from numpy.fft import fft, ifft
 # %matplotlib inline
 
 # file path may differ
-Fs, data = wavFile.read('/home/lemonorange/catRemix/testAudio.wav')
+Fs, data = wavFile.read('/home/lemonorange/catRemix/augmentedData/wav/synthBass1/772.wav')
 data = data[:,0]
+
+data.tolist()
 
 print("sampling Frequency is", Fs)
 downScale = []
@@ -40,7 +42,7 @@ for datapoint in data:
 
 downScale = np.array(downScale, dtype="float32")
 
-Audio(downScale, rate=Fs)
+Audio(data, rate=Fs)
 plt.figure()
 plt.plot(downScale)
 

@@ -29,7 +29,7 @@ for midFile in tqdm(os.listdir(sourceMid_path)):
         start_time = int(line.split(',')[0]) - reps*counterThingIdek
         end_time = int(line.split(',')[1]) - reps*counterThingIdek
         data = line.split(',')[2]
-        if(start_time < reps and end_time > reps):
+        if(start_time <= reps and end_time >= reps):
             for i in range(start_time, reps+1):
                 file_output_stream += str(i) + ','  + data
             new_output_name = midFile.split('.')[0] + '_' + str(counterThingIdek) + '.rawOut'
@@ -37,9 +37,9 @@ for midFile in tqdm(os.listdir(sourceMid_path)):
             fout.write(file_output_stream)
             fout.close()
             file_output_stream = str(tempo)+'\n'
-            for i in range(0, int(line.split(',')[1])):
-                file_output_stream += str(i) + ','  + data
             counterThingIdek += 1
+            for i in range(0, int(line.split(',')[1])-reps*counterThingIdek):
+                file_output_stream += str(i) + ','  + data
         else:
             for i in range(start_time, end_time):
                 file_output_stream += str(i) + ','  + data
